@@ -34,24 +34,22 @@ class App extends Component {
         };
 
         return (
-            <div className='maingrid'>
-                <Sidebar.Pushable as={Segment} className='wrapper'>
-                    <Sidebar as={Menu} animation='overlay' direction='bottom' visible={true} inverted>
-                        <StatusIcon component='System' state={system} />
-                        <StatusIcon component='Database' state={database} />
-                        <StatusIcon component='IRI' state={iri} />
-                        <StatusIcon component='Nelson' state={nelson} />
-                        <Popup trigger={
-                            <Menu.Item name='donate' color='red' onClick={copyAddress}>
-                                <Icon name='heart' color='red' /> Donate
-                            </Menu.Item>
-                        } content={this.copied ? 'Copied! (click to copy again)' : 'Click to copy address'} wide />
-                    </Sidebar>
-                    <Sidebar.Pusher>
-                        <StateView state={this.state} />
-                    </Sidebar.Pusher>
-                </Sidebar.Pushable>
-            </div>
+            <Sidebar.Pushable as={Segment} className='wrapper'>
+                <Sidebar as={Menu} animation='overlay' direction='bottom' visible={true} inverted>
+                    <StatusIcon component='System' state={system} />
+                    <StatusIcon component='Database' state={database} />
+                    <StatusIcon component='IRI' state={iri} />
+                    <StatusIcon component='Nelson' state={nelson} />
+                    <Popup trigger={
+                        <Menu.Item name='donate' color='red' onClick={copyAddress}>
+                            <Icon name='heart' color='red' /> Donate
+                        </Menu.Item>
+                    } content={this.copied ? 'Copied! (click to copy again)' : 'Click to copy address'} wide />
+                </Sidebar>
+                <Sidebar.Pusher>
+                    <StateView state={this.state} />
+                </Sidebar.Pusher>
+            </Sidebar.Pushable>
         );
     }
 }
