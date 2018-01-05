@@ -10,6 +10,7 @@ run an IOTA full node.
     * [Installing](#installing)
     * [Running](#running)
     * [Shutting Down](#shutting-down)
+  * [Building Locally](#building-locally)
   * [FAQ](#faq)
   * [Contributing](#contributing)
     * [Donations](#donations)
@@ -27,15 +28,16 @@ You need Java to have installed on your machine.
 
 You also need to open ports (port forwarding) in your NAT Router:
 
-* UDP 14600
-* TCP 15600
-* TCP 16600
+* **UDP 14600**
+* **TCP 15600**
+* **TCP 16600**
 
 Please refer to your Router's manual on how to do that.
 
 ### Installing
 
-Download a package corresponding to your OS from releases, unpack, ready.
+Download a package corresponding to your OS from releases, unpack, click the executable.
+On Linux, you might need to start bolero.run from the command line.
 
 ### Running
 
@@ -58,6 +60,19 @@ http://localhost:14265
 ### Shutting Down
 
 Right click on the carrot in your tray/task bar and select "Exit".
+
+## Building locally
+
+```
+npm install
+npm run build
+
+# Run development version
+npm run dev
+
+# Package binaries
+npm run package
+```
 
 ## FAQ
 
