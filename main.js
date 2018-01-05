@@ -45,7 +45,7 @@ function createWindow() {
     if (dev && process.argv.indexOf('--noDevServer') === -1) {
         indexPath = url.format({
             protocol: 'http:',
-            host: 'localhost:8080',
+            host: 'localhost:8088',
             pathname: 'index.html',
             slashes: true
         });
@@ -60,7 +60,7 @@ function createWindow() {
 
     const onHide = () => {
         tray.setHighlightMode('never');
-        let trayImage;
+        let trayImage = path.join(assetsDirectory, 'icon-128x128.png');
         if (platform === 'darwin') {
             trayImage = path.join(assetsDirectory, 'icon.png');
         }
