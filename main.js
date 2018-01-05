@@ -202,6 +202,7 @@ app.dock && app.dock.hide();
 
 app.on('ready', () => {
     controller.start();
+    setInterval(() => onStateChange(controller.getState()), 5000);
     createTray();
     createWindow();
 });
