@@ -1,4 +1,30 @@
-h1 {
-  font-family: helvetica;
-  font-weight: 200;
+body {
+  margin: 0;
+  padding: 0;
+  background-color: ghostwhite;
+}
+
+body, #root, .maingrid {
+  height: 457px;
+}
+
+.ui.segment.wrapper {
+  border: 0;
+}
+
+.menu {
+  background-color: ghostwhite;
+  width: 100%;
+  height: 100%;
+}
+
+.ui.segment.loadview {
+  padding: 10%;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ui.huge.loader.mainloader {
+  margin-bottom: 20px;
 }
