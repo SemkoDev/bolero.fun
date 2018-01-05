@@ -128,7 +128,7 @@ function createWindow() {
 }
 
 function createTray() {
-    let trayImage;
+    let trayImage = path.join(assetsDirectory, 'icon-128x128.png');
     if (platform === 'darwin') {
         trayImage = path.join(assetsDirectory, 'icon.png');
     }
@@ -189,7 +189,7 @@ process.on('SIGINT', terminate);
 process.on('SIGTERM', terminate);
 
 // Don't show the app in the doc
-app.dock.hide();
+app.dock && app.dock.hide();
 
 app.on('ready', () => {
     controller.start();
