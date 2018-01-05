@@ -45,7 +45,7 @@ function createWindow() {
     if (dev && process.argv.indexOf('--noDevServer') === -1) {
         indexPath = url.format({
             protocol: 'http:',
-            host: 'localhost:8080',
+            host: 'localhost:8088',
             pathname: 'index.html',
             slashes: true
         });
@@ -60,7 +60,7 @@ function createWindow() {
 
     const onHide = () => {
         tray.setHighlightMode('never');
-        let trayImage;
+        let trayImage = path.join(assetsDirectory, 'icon-128x128.png');
         if (platform === 'darwin') {
             trayImage = path.join(assetsDirectory, 'icon.png');
         }
@@ -68,13 +68,14 @@ function createWindow() {
             trayImage = path.join(assetsDirectory, 'icon.ico');
         }
         tray.setImage(trayImage);
+        mainWindow = null;
     };
 
     // Don't show until we are ready and loaded
     mainWindow.once('ready-to-show', () => {
         mainWindow.show();
-        onStateChange(state);
         mainWindow.focus();
+        onStateChange(state);
         // Open the DevTools automatically if developing
         if (dev) {
             mainWindow.webContents.openDevTools();
@@ -86,13 +87,10 @@ function createWindow() {
             tray.setImage(path.join(assetsDirectory, 'iconHighlight.png'));
         }
     });
-    mainWindow.on('hide', () => onHide());
+    mainWindow.on('hide', onHide);
 
     // Emitted when the window is closed.
-    mainWindow.on('closed', function () {
-        onHide();
-        mainWindow = null;
-    });
+    mainWindow.on('closed', onHide);
 
     mainWindow.on('onbeforeunload', (e) => {
         e.returnValue = 1;
@@ -128,7 +126,7 @@ function createWindow() {
 }
 
 function createTray() {
-    let trayImage;
+    let trayImage = path.join(assetsDirectory, 'icon-128x128.png');
     if (platform === 'darwin') {
         trayImage = path.join(assetsDirectory, 'icon.png');
     }
@@ -142,6 +140,16 @@ function createTray() {
 
     const contextMenu = Menu.buildFromTemplate([
         {
+            label: 'Open',
+            accelerator: 'Alt+Command+O',
+            click: function () {
+                if (!mainWindow) {
+                    createWindow()
+                } else if (!mainWindow.isVisible()) {
+                    mainWindow.show();
+                }
+            }
+        }, {
             label: 'Exit',
             accelerator: 'Alt+Command+X',
             click: function () {
@@ -153,6 +161,7 @@ function createTray() {
         }
     ]);
 
+    tray.setContextMenu(contextMenu);
     tray.setToolTip('CarrIOTA Bolero');
     tray.on('click', toggleWindow);
     tray.on('right-click', () => tray.popUpContextMenu(contextMenu));
@@ -189,7 +198,7 @@ process.on('SIGINT', terminate);
 process.on('SIGTERM', terminate);
 
 // Don't show the app in the doc
-app.dock.hide();
+app.dock && app.dock.hide();
 
 app.on('ready', () => {
     controller.start();

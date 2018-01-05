@@ -4,8 +4,8 @@ body {
   background-color: ghostwhite;
 }
 
-body, #root, .maingrid {
-  height: 457px;
+#root {
+  height: 100%;
 }
 
 .ui.segment.wrapper {
