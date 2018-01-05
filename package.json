@@ -1,21 +1,30 @@
 {
-  "name": "basic-electron-react-boilerplate",
-  "version": "0.7.0",
-  "description": "Minimal and modern react+electron+webpack boilerplate",
-  "author": "Phillip Barbiero",
-  "homepage": "https://github.com/pbarbiero/basic-electron-react-boilerplate",
+  "name": "bolero.fun",
+  "version": "0.0.1",
+  "description": "IOTA Electron Full-node-app",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pbarbiero/basic-electron-react-boilerplate.git"
+    "url": "https://github.com/SemkoDev/bolero.fun.git"
   },
-  "license": "MIT",
+  "keywords": [
+    "blockchain",
+    "IOTA",
+    "tangle",
+    "p2p"
+  ],
+  "homepage": "https://semkodev.com",
+  "author": "Roman Semko <roman@deviota.com> (http://twitter.com/RomanSemko)",
+  "license": "ISC",
   "main": "main.js",
   "scripts": {
     "prod": "webpack --config webpack.build.config.js && electron --noDevServer .",
     "dev": "webpack-dev-server --hot --host 0.0.0.0 --config=./webpack.dev.config.js",
     "build": "webpack --config webpack.build.config.js",
     "package": "webpack --config webpack.build.config.js",
-    "postpackage": "electron-packager ./ --out=./builds"
+    "postpackage": "npm run package-mac && npm run package-linux && npm run package-win",
+    "package-mac": "electron-packager ./ --overwrite --platform=darwin --arch=x64 --icon=src/assets/img/icon.icns --prune=true --out=builds",
+    "package-win": "electron-packager ./ --overwrite --asar=true --platform=win32 --arch=ia32 --icon=src/assets/img/icon.ico --prune=true --out=builds --version-string.CompanyName=SemkoDev --version-string.FileDescription=CE --version-string.ProductName=\"CarrIOTA Bolero\"",
+    "package-linux": "electron-packager ./ --overwrite --asar=true --platform=linux --arch=x64 --icon=src/assets/img/icon-128x128.png --prune=true --out=builds"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
@@ -33,5 +42,12 @@
     "style-loader": "^0.19.0",
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.4.5"
+  },
+  "dependencies": {
+    "bolero.lib": "0.0.3",
+    "colors": "^1.1.2",
+    "nat-upnp": "^1.1.1",
+    "semantic-ui-css": "^2.2.12",
+    "semantic-ui-react": "^0.77.1"
   }
 }

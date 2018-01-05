@@ -5,10 +5,11 @@ const { spawn } = require('child_process');
 
 // Config directories
 const SRC_DIR = path.resolve(__dirname, 'src');
+const MODULES = path.resolve(__dirname, 'node_modules');
 const OUTPUT_DIR = path.resolve(__dirname, 'dist');
 
 // Any directories you will be adding code/files into, need to be added to this array so webpack will pick them up
-const defaultInclude = [SRC_DIR];
+const defaultInclude = [SRC_DIR, path.join(MODULES, 'semantic-ui-css')];
 
 module.exports = {
   entry: SRC_DIR + '/index.js',
@@ -43,7 +44,9 @@ module.exports = {
   },
   target: 'electron-renderer',
   plugins: [
-    new HtmlWebpackPlugin(),
+    new HtmlWebpackPlugin({
+        title: 'CarrIOTA Bolero'
+    }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development')
     })

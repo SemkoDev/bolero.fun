@@ -1,80 +1,203 @@
-'use strict';
+const electron = require('electron');
+const platform = require('os').platform();
+const path = require('path');
+const url = require('url');
+const {Controller} = require('bolero.lib');
 
 // Import parts of electron to use
-const {app, BrowserWindow} = require('electron');
-const path = require('path')
-const url = require('url')
+const {app, Menu, Tray, BrowserWindow} = electron;
+const assetsDirectory = path.join(__dirname, 'src', 'assets', 'img');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
+let tray;
+let terminating;
+const controller = new Controller({ onStateChange, targetDir: path.join(app.getPath('home'), '.bolero') });
+let state = controller.getState();
 
 // Keep a reference for dev mode
 let dev = false;
-if ( process.defaultApp || /[\\/]electron-prebuilt[\\/]/.test(process.execPath) || /[\\/]electron[\\/]/.test(process.execPath) ) {
-  dev = true;
+if (process.defaultApp || /[\\/]electron-prebuilt[\\/]/.test(process.execPath) || /[\\/]electron[\\/]/.test(process.execPath)) {
+    dev = true;
 }
 
 function createWindow() {
-  // Create the browser window.
-  mainWindow = new BrowserWindow({
-    width: 1024, height: 768, show: false
-  });
-
-  // and load the index.html of the app.
-  let indexPath;
-  if ( dev && process.argv.indexOf('--noDevServer') === -1 ) {
-    indexPath = url.format({
-      protocol: 'http:',
-      host: 'localhost:8080',
-      pathname: 'index.html',
-      slashes: true
+    // Create the browser window.
+    mainWindow = new BrowserWindow({
+        width: 477,
+        height: 477,
+        show: false,
+        fullscreenable: false,
+        resizable: false,
+        minimizable: false,
+        maximizable: false,
+        webPreferences: {
+            // Prevents renderer process code from not running when window is hidden
+            backgroundThrottling: false,
+            nodeIntegration: true,
+            preload: __dirname + '/preload.js'
+        }
     });
-  } else {
-    indexPath = url.format({
-      protocol: 'file:',
-      pathname: path.join(__dirname, 'dist', 'index.html'),
-      slashes: true
-    });
-  }
-  mainWindow.loadURL( indexPath );
 
-  // Don't show until we are ready and loaded
-  mainWindow.once('ready-to-show', () => {
-    mainWindow.show();
-    // Open the DevTools automatically if developing
-    if ( dev ) {
-      mainWindow.webContents.openDevTools();
+    // and load the index.html of the app.
+    let indexPath;
+    if (dev && process.argv.indexOf('--noDevServer') === -1) {
+        indexPath = url.format({
+            protocol: 'http:',
+            host: 'localhost:8080',
+            pathname: 'index.html',
+            slashes: true
+        });
+    } else {
+        indexPath = url.format({
+            protocol: 'file:',
+            pathname: path.join(__dirname, 'dist', 'index.html'),
+            slashes: true
+        });
     }
-  });
+    mainWindow.loadURL(indexPath);
 
-  // Emitted when the window is closed.
-  mainWindow.on('closed', function() {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    mainWindow = null;
-  });
+    const onHide = () => {
+        tray.setHighlightMode('never');
+        let trayImage;
+        if (platform === 'darwin') {
+            trayImage = path.join(assetsDirectory, 'icon.png');
+        }
+        else if (platform === 'win32') {
+            trayImage = path.join(assetsDirectory, 'icon.ico');
+        }
+        tray.setImage(trayImage);
+    };
+
+    // Don't show until we are ready and loaded
+    mainWindow.once('ready-to-show', () => {
+        mainWindow.show();
+        onStateChange(state);
+        mainWindow.focus();
+        // Open the DevTools automatically if developing
+        if (dev) {
+            mainWindow.webContents.openDevTools();
+        }
+    });
+    mainWindow.on('show', () => {
+        tray.setHighlightMode('always');
+        if (platform === "darwin") {
+            tray.setImage(path.join(assetsDirectory, 'iconHighlight.png'));
+        }
+    });
+    mainWindow.on('hide', () => onHide());
+
+    // Emitted when the window is closed.
+    mainWindow.on('closed', function () {
+        onHide();
+        mainWindow = null;
+    });
+
+    mainWindow.on('onbeforeunload', (e) => {
+        e.returnValue = 1;
+    });
+
+    // Check if we are on a MAC
+    if (process.platform === 'darwin') {
+        const template = [{
+            role: 'window',
+            label: "Application",
+            submenu: [
+                { label: "About Application", selector: "orderFrontStandardAboutPanel:" },
+                { type: "separator" },
+                { label: "Quit", accelerator: "Command+Q", click: function() { app.quit(); }}
+            ]}, {
+            role: 'services',
+            label: "Edit",
+            submenu: [
+                {role: 'undo'},
+                {role: 'redo'},
+                {type: 'separator'},
+                {role: 'cut'},
+                {role: 'copy'},
+                {role: 'paste'},
+                {role: 'pasteandmatchstyle'},
+                {role: 'delete'},
+                {role: 'selectall'}
+            ]}
+        ];
+
+        Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+    }
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+function createTray() {
+    let trayImage;
+    if (platform === 'darwin') {
+        trayImage = path.join(assetsDirectory, 'icon.png');
+    }
+    else if (platform === 'win32') {
+        trayImage = path.join(assetsDirectory, 'icon.ico');
+    }
+    tray = new Tray(trayImage);
+    if (platform === "darwin") {
+        tray.setPressedImage(path.join(assetsDirectory, 'iconHighlight.png'));
+    }
 
-// Quit when all windows are closed.
-app.on('window-all-closed', () => {
-  // On macOS it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+    const contextMenu = Menu.buildFromTemplate([
+        {
+            label: 'Exit',
+            accelerator: 'Alt+Command+X',
+            click: function () {
+                if (mainWindow && mainWindow.isVisible()) {
+                    mainWindow.hide()
+                }
+                terminate();
+            }
+        }
+    ]);
+
+    tray.setToolTip('CarrIOTA Bolero');
+    tray.on('click', toggleWindow);
+    tray.on('right-click', () => tray.popUpContextMenu(contextMenu));
+}
+
+function toggleWindow() {
+    if (mainWindow && mainWindow.isVisible()) {
+        if (dev) {
+            mainWindow.webContents.closeDevTools();
+        }
+        mainWindow.hide()
+    } else {
+        createWindow()
+    }
+}
+
+function onStateChange(newState) {
+    state = newState;
+    console.log('new state', newState);
+    if (!terminating && mainWindow) {
+        mainWindow.webContents.send('state', state);
+    }
+}
+
+function terminate() {
+    controller.stop().then(() => {
+        terminating = true;
+        app.quit();
+        process.exit(0);
+    })
+}
+
+process.on('SIGINT', terminate);
+process.on('SIGTERM', terminate);
+
+// Don't show the app in the doc
+app.dock.hide();
+
+app.on('ready', () => {
+    controller.start();
+    createTray();
+    createWindow();
 });
 
-app.on('activate', () => {
-  // On macOS it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (mainWindow === null) {
-    createWindow();
-  }
+// Quit when all windows are closed.
+app.on('window-all-closed', function () {
+    //app.quit()
 });

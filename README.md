@@ -1,29 +1,104 @@
-# Modern and Minimal Electron + React Starter Kit
-_Electron, React, Webpack -- Modern and up-to-date, with a handful of quality of life features included_
+# CarrIOTA Bolero
 
-I made this starter kit as most boilerplates were either out-of-date, heavy handed, or enforced a structure on me that I just didnt like.
-With a very select assortment of modules, this starter kit is designed to get you up and running very quickly, and to let you easily drop in your own structure and tools on top of it.
-The basic structure of `src/` is intentionally minimal to make it easier to allow you to put your own twist on how you like things laid out.
+Bolero is a desktop application for various environments (Windows, Mac, Linux) to easily
+run an IOTA full node.
 
-Production builds babel-minify is used, and ES2015/ES6 transpilation is provided -- As modern node and chromium versions support 99%+ of the ES6 feature set, I feel those steps are unnecessary.
+## Table of contents
 
-If you like this project, check out [enhanced-electron-react-boilerplate](https://github.com/pbarbiero/enhanced-electron-react-boilerplate) which is this project with my take on additional modules (photon, redux, less, css modules etc) and my personal project structure (based on the redux ducks proposal) I suggest you give it a look if you want less of a minimalistic take on my starter kit.
+  * [Getting Started](#getting-started)
+    * [Prerequisites](#prerequisites)
+    * [Installing](#installing)
+    * [Running](#running)
+    * [Shutting Down](#shutting-down)
+  * [FAQ](#faq)
+  * [Contributing](#contributing)
+    * [Donations](#donations)
+    * [Running Bolero](#running-bolero)
+  * [Authors](#authors)
+  * [License](#license)
 
-### To get started:
-* Run `npm install`
+## Getting Started
 
-##### Development
-* Run `npm run dev` to start webpack-dev-server. Electron will launch automatically after compilation.
+These instructions will get you a copy of this project running on your machine.
 
-##### Production
-_You have two options, an automatic build or two manual steps_
+### Prerequisites
 
-###### One Shot
-* Run `npm run package` to have webpack compile your application into `dist/bundle.js` and `dist/index.html`, and then an electron-packager run will be triggered for the current platform/arch, outputting to `builds/`
+You need Java to have installed on your machine.
 
-###### Manual
-_Recommendation: Update the "postpackage" script call in package.json to specify parameters as you choose and use the `npm run package` command instead of running these steps manually_
-* Run `npm run build` to have webpack compile and output your bundle to `dist/bundle.js`
-* Then you can call electron-packager directly with any commands you choose
+You also need to open ports (port forwarding) in your NAT Router:
 
-If you want to test the production build (In case you think Babili might be breaking something) after running `npm run build` you can then call `npm run prod`. This will cause electron to load off of the `dist/` build instead of looking for the webpack-dev-server instance. Electron will launch automatically after compilation.
+* UDP 14600
+* TCP 15600
+* TCP 16600
+
+Please refer to your Router's manual on how to do that.
+
+### Installing
+
+Download a package corresponding to your OS from releases, unpack, ready.
+
+### Running
+
+There is not much to do here. This is still barebone. Just start the app.
+Everything runs on default ports and cofigurations.
+
+The app appears as a carrot symbol in your tray/task bar.
+
+First start might take a while, since Bolero downloads IRI (full node package)
+and a snapshot of the database, which is over 5GB in size. So the first start
+might take some time.
+
+Once Bolero is running as is synced, you can use it as a full node for your
+IOTA wallet with this address:
+
+```
+http://localhost:14265
+```
+
+### Shutting Down
+
+Right click on the carrot in your tray/task bar and select "Exit".
+
+## FAQ
+
+### How to upgrade?
+
+Shut down Bolero, download the new version. Start it. Database and snapshots are preserved.
+
+### Where is the database located?
+
+In the User's home directory in a folder called ```.bolero```
+
+### It takes very long to get synced
+
+The longer you have been offline (not running Bolero), the longer it takes.
+Also, make sure that your ports are open (refer to the prerequisites instructions above.)
+
+### What if I have more questions?
+
+* Join ```#bolero``` channel on IOTA's slack!
+
+## Contributing
+
+### Donations
+
+**Donations always welcome**:
+
+```
+IQJGHISHRMV9LEAEMSUIXMFTLLZIJWXIQOAZLGNXCFY9BLPTFTBNBPGU9YQFQKC9GEBPNNFO9DMGKYUECCG9ZSHMRW
+```
+
+### Running Bolero
+
+THe longer your app is running, the better for the network. Contribute to IOTA
+by running Bolero as much as you can!
+
+
+## Authors
+
+* **Roman Semko** - *SemkoDev* - (https://github.com/romansemko)
+
+## License
+
+This project is licensed under the ICS License - see the [LICENSE.md](LICENSE.md) file for details
+
