@@ -2,10 +2,10 @@ const electron = require('electron');
 const platform = require('os').platform();
 const path = require('path');
 const url = require('url');
-const {Controller} = require('bolero.lib');
+const { Controller } = require('bolero.lib');
 
 // Import parts of electron to use
-const {app, Menu, Tray, BrowserWindow} = electron;
+const { app, Menu, Tray, BrowserWindow } = electron;
 const assetsDirectory = path.join(__dirname, 'src', 'assets', 'img');
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -59,6 +59,9 @@ function createWindow() {
     mainWindow.loadURL(indexPath);
 
     const onHide = () => {
+        if (!tray) {
+            return;
+        }
         tray.setHighlightMode('never');
         let trayImage = path.join(assetsDirectory, 'icon-128x128.png');
         if (platform === 'darwin') {
@@ -153,6 +156,10 @@ function createTray() {
             label: 'Exit',
             accelerator: 'Alt+Command+X',
             click: function () {
+                if (tray) {
+                    tray.destroy();
+                    tray = null;
+                }
                 if (mainWindow && mainWindow.isVisible()) {
                     mainWindow.hide()
                 }
@@ -187,7 +194,9 @@ function onStateChange(newState) {
 }
 
 function terminate() {
+    console.log("STOPPING BOLERO..");
     controller.stop().then(() => {
+        console.log("BOLERO STOPPED!");
         terminating = true;
         app.quit();
         process.exit(0);
