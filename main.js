@@ -3,13 +3,14 @@ const platform = require('os').platform();
 const path = require('path');
 const url = require('url');
 const { Controller } = require('bolero.lib');
-
 // Import parts of electron to use
 const { app, Menu, Tray, BrowserWindow } = electron;
-const assetsDirectory = path.join(__dirname, 'src', 'assets', 'img');
 
+const assetsDirectory = path.join(__dirname, 'src', 'assets', 'img');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
+
+let eNotify = null;
 let mainWindow;
 let tray;
 let terminating;
@@ -72,6 +73,10 @@ function createWindow() {
         }
         tray.setImage(trayImage);
         mainWindow = null;
+        eNotify.notify({
+            title: 'Bolero runs in the background',
+            text: 'You can close Bolero completely in the tray menu.'
+        });
     };
 
     // Don't show until we are ready and loaded
@@ -210,6 +215,10 @@ process.on('SIGTERM', terminate);
 app.dock && app.dock.hide();
 
 app.on('ready', () => {
+    eNotify = require('electron-notify');  // can only be imported after the app is ready
+    eNotify.setConfig({
+        displayTime: 6000
+    });
     controller.start();
     createTray();
     createWindow();
