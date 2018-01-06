@@ -28,9 +28,6 @@ class App extends Component {
             this.setState({ copied: {} });
             window.clipboard.writeText(DONATE_ADDR);
             window.clipboard.writeText(DONATE_ADDR, 'selection');
-            console.log('DONATE_ADDR', DONATE_ADDR);
-            console.log('CLIP', clipboard.readText('selection'));
-            console.log('CLIP2', clipboard.readText());
         };
 
         return (
@@ -122,6 +119,15 @@ function StateView ({ state }) {
     const isIRISyncronized = state.iri.status === 'running' &&
         state.iri.info.latestSolidSubtangleMilestoneIndex > 243000 &&
         state.iri.info.latestSolidSubtangleMilestoneIndex === state.iri.info.latestMilestoneIndex;
+    const isIRISyncronizedText = isIRISyncronized
+        ? 'Yes'
+        : (
+            state.iri && state.iri.info && state.iri.info.latestSolidSubtangleMilestoneIndex &&
+            state.iri.info.latestSolidSubtangleMilestoneIndex > 243000 &&
+            Math.abs(state.iri.info.latestSolidSubtangleMilestoneIndex - state.iri.info.latestMilestoneIndex) < 600
+        )
+            ? 'Almost'
+            : 'No';
     const iriMilestones = state.iri.status === 'running'
         ? `(${state.iri.info.latestSolidSubtangleMilestoneIndex}/${state.iri.info.latestMilestoneIndex})`
         : '';
@@ -150,7 +156,7 @@ function StateView ({ state }) {
                     <List.Icon name='wifi' size='large' verticalAlign='middle' />
                     <List.Content>
                         <List.Header>IRI Synchronized?</List.Header>
-                        <List.Description>{isIRISyncronized ? 'Yes' : 'No'}&nbsp;{iriMilestones}</List.Description>
+                        <List.Description>{isIRISyncronizedText}&nbsp;{iriMilestones}</List.Description>
                     </List.Content>
                 </List.Item>
                 <List.Item>
