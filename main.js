@@ -180,7 +180,7 @@ function toggleWindow() {
 
 function onStateChange(newState) {
     state = newState;
-    console.log('new state', newState);
+    // console.log(JSON.stringify(newState, null, 2));
     if (!terminating && mainWindow) {
         mainWindow.webContents.send('state', state);
     }
@@ -202,7 +202,6 @@ app.dock && app.dock.hide();
 
 app.on('ready', () => {
     controller.start();
-    setInterval(() => onStateChange(controller.getState()), 5000);
     createTray();
     createWindow();
 });
