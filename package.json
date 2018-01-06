@@ -1,6 +1,6 @@
 {
   "name": "bolero.fun",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "IOTA Electron Full-node-app",
   "repository": {
     "type": "git",
@@ -44,7 +44,7 @@
     "webpack-dev-server": "^2.4.5"
   },
   "dependencies": {
-    "bolero.lib": "^0.1.2",
+    "bolero.lib": "^0.1.3",
     "colors": "^1.1.2",
     "electron-notify": "^0.1.0",
     "nat-upnp": "^1.1.1",
