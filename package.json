@@ -1,6 +1,6 @@
 {
   "name": "bolero.fun",
-  "version": "0.0.4",
+  "version": "0.1<.5",
   "description": "IOTA Electron Full-node-app",
   "repository": {
     "type": "git",
