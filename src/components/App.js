@@ -63,7 +63,9 @@ function StatusIcon ({ component, state }) {
         case 'downloading':
             icon = 'download';
             color = 'orange';
-            popup = `${state.status}: ${(state.progress.percent * 100).toFixed(2)}%`;
+            popup = component === 'Database' && state.progress.percent >= 0.99
+                ? 'Extracting database - this may take a while'
+                : `${state.status}: ${(state.progress.percent * 100).toFixed(2)}%`;
             break;
         case 'ready':
             icon = 'checkmark';
