@@ -26,8 +26,8 @@ if (process.defaultApp || /[\\/]electron-prebuilt[\\/]/.test(process.execPath) |
 function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({
-        width: 477,
-        height: 477,
+        width: 510,
+        height: 510,
         show: false,
         fullscreenable: false,
         resizable: false,
@@ -228,3 +228,7 @@ app.on('ready', () => {
 app.on('window-all-closed', function () {
     //app.quit()
 });
+
+module.exports = {
+    requestUpdate: () => onStateChange(state)
+};
