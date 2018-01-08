@@ -24,7 +24,13 @@ These instructions will get you a copy of this project running on your machine.
 
 ### Prerequisites
 
-You need Java to have installed on your machine.
+You need Java to have installed on your machine. 
+
+**WINDOWS:** Please make sure you have the correct Java installed. Running 32bit Java on a 64bit machine
+might crash IRI. If in doubt, install java from here, selecting correct bit version (32 or 64) depending
+on your machine: ﻿https://www.java.com/en/download/manual.jsp
+
+**WINDOWS:** Download and install the latest Visual C++ redistributable from here: https://download.visualstudio.microsoft.com/download/pr/11100230/15ccb3f02745c7b206ad10373cbca89b/VC_redist.x64.exe
 
 You also need to open ports (port forwarding) in your NAT Router:
 
@@ -88,6 +94,20 @@ In the User's home directory in a folder called ```.bolero```
 
 The longer you have been offline (not running Bolero), the longer it takes.
 Also, make sure that your ports are open (refer to the prerequisites instructions above.)
+
+### I am getting IRI error with exit code 1 on Windows
+
+Please make sure you have the correct Java installed. Running 32bit Java on a 64bit machine
+might crash IRI. If in doubt, install java from here, selecting correct bit version (32 or 64) depending
+on your machine: ﻿https://www.java.com/en/download/manual.jsp
+
+Restart your computer to take effect.
+
+Also, download and install the latest Visual C++ redistributable from here: https://download.visualstudio.microsoft.com/download/pr/11100230/15ccb3f02745c7b206ad10373cbca89b/VC_redist.x64.exe
+
+### I am getting IRI error with exit code 4294967295
+
+Please download Bolero 0.1.10 or above.
 
 ### What if I have more questions?
 
