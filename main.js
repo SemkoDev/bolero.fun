@@ -228,3 +228,7 @@ app.on('ready', () => {
 app.on('window-all-closed', function () {
     //app.quit()
 });
+
+module.exports = {
+    requestUpdate: () => onStateChange(state)
+};

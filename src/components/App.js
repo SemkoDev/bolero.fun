@@ -6,6 +6,8 @@ import '../assets/css/App.css';
 
 const DONATE_ADDR = 'IQJGHISHRMV9LEAEMSUIXMFTLLZIJWXIQOAZLGNXCFY9BLPTFTBNBPGU9YQFQKC9GEBPNNFO9DMGKYUECCG9ZSHMRW';
 
+const main = window.remote.require("./main.js");
+
 class App extends Component {
     constructor(params) {
         super(params);
@@ -14,6 +16,7 @@ class App extends Component {
             console.log('STATE', state);
             this.setState(state);
         });
+        setInterval(main.requestUpdate, 5000);
     }
 
     render() {
@@ -110,6 +113,7 @@ class StateView extends Component {
         this.state = {
             copiedAddress: 0
         };
+
     }
 
     render () {
