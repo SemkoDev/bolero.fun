@@ -28,3 +28,13 @@ body {
 .ui.huge.loader.mainloader {
   margin-bottom: 20px;
 }
+
+.logview {
+  height: auto;
+  padding: 5px;
+  max-height: 470px;
+  overflow: auto;
+  word-break: normal !important;
+  word-wrap: break-word !important;
+  white-space: pre-wrap !important;
+}
