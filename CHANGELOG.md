@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.1.11] - 2018-01-09
+
 ### Changes
 - fixes #24 - less memory required: changed to 3.6GB
 - fixed #23 - sync on windows
