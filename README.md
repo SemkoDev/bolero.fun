@@ -32,6 +32,8 @@ on your machine: ﻿https://www.java.com/en/download/manual.jsp
 
 **WINDOWS:** Download and install the latest Visual C++ redistributable from here: https://download.visualstudio.microsoft.com/download/pr/11100230/15ccb3f02745c7b206ad10373cbca89b/VC_redist.x64.exe
 
+#### Port Forwarding
+
 You also need to open ports (port forwarding) in your NAT Router:
 
 * **UDP 14600**
@@ -39,6 +41,12 @@ You also need to open ports (port forwarding) in your NAT Router:
 * **TCP 16600**
 
 Please refer to your Router's manual on how to do that.
+
+Furthermore, if you launch your node at home, please be aware that apart of firewall and port-forwarding in
+your router, your Internet provider may also be an issue. Some providers (like Vodafone in Germany) do not have enough IPv4 addresses and
+thus use something called "**IPv4 over DS Lite**". In those cases the **traffic will not come through** over the ports
+mentioned above. Unfortunately, there is no quick fix for this issue (maybe changing providers).
+There is some hope with the upcoming PCP-protocol, this will not happen this year (2018) for most providers, though.
 
 ### Installing
 
@@ -120,7 +128,7 @@ Please download Bolero 0.1.10 or above.
 **Donations always welcome**:
 
 ```
-IQJGHISHRMV9LEAEMSUIXMFTLLZIJWXIQOAZLGNXCFY9BLPTFTBNBPGU9YQFQKC9GEBPNNFO9DMGKYUECCG9ZSHMRW
+SOZAIPJMQUBOFCTDTJJDXCZEKNIYZGIGVDLFMH9FFBAYK9SWGTBCWVUTFHXDOUESZAXRJJCJESJPIEQCCKBUTVQPOW
 ```
 
 ### Running Bolero
