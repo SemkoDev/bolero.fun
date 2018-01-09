@@ -4,7 +4,7 @@ import { Sidebar, Segment, Menu, Header, Icon, List, Popup, Progress, Loader } f
 import 'semantic-ui-css/semantic.min.css';
 import '../assets/css/App.css';
 
-const DONATE_ADDR = 'IQJGHISHRMV9LEAEMSUIXMFTLLZIJWXIQOAZLGNXCFY9BLPTFTBNBPGU9YQFQKC9GEBPNNFO9DMGKYUECCG9ZSHMRW';
+const DONATE_ADDR = 'SOZAIPJMQUBOFCTDTJJDXCZEKNIYZGIGVDLFMH9FFBAYK9SWGTBCWVUTFHXDOUESZAXRJJCJESJPIEQCCKBUTVQPOW';
 
 class App extends Component {
     constructor(params) {
