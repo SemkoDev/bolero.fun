@@ -6,17 +6,21 @@ import '../assets/css/App.css';
 
 const DONATE_ADDR = 'IQJGHISHRMV9LEAEMSUIXMFTLLZIJWXIQOAZLGNXCFY9BLPTFTBNBPGU9YQFQKC9GEBPNNFO9DMGKYUECCG9ZSHMRW';
 
-const main = window.remote.require("./main.js");
-
 class App extends Component {
     constructor(params) {
         super(params);
-        this.state = {};
+        this.state = {
+            state: {},
+            messages: [],
+            showLog: false
+        };
         window.ipcRenderer.on('state', (event, state) => {
             console.log('STATE', state);
             this.setState(state);
         });
-        setInterval(main.requestUpdate, 5000);
+        setInterval(() => {
+            window.ipcRenderer.send('requestUpdate', 1);
+        }, 3000)
     }
 
     render() {
@@ -25,7 +29,7 @@ class App extends Component {
             nelson = { status: 'waiting' },
             database = { status: 'waiting' },
             system = { status: 'waiting' }
-        } = this.state;
+        } = this.state.state;
         const copyAddress = () => {
             this.copied = true;
             this.setState({ copied: {} });
@@ -40,6 +44,9 @@ class App extends Component {
                     <StatusIcon component='Database' state={database} />
                     <StatusIcon component='IRI' state={iri} />
                     <StatusIcon component='Nelson' state={nelson} />
+                    <Menu.Item name='log' color='white' onClick={() => this.setState({ showLog: !this.state.showLog })}>
+                        <Icon name='bell' color={this.state.showLog ? 'green' : 'white'} />
+                    </Menu.Item>
                     <Popup trigger={
                         <Menu.Item name='donate' color='red' onClick={copyAddress}>
                             <Icon name='heart' color='red' /> Donate
@@ -47,11 +54,20 @@ class App extends Component {
                     } content={this.copied ? 'Copied! (click to copy again)' : 'Click to copy address'} wide />
                 </Sidebar>
                 <Sidebar.Pusher>
-                    <StateView state={this.state} />
+                    {this.state.showLog ? <LogView messages={this.state.messages} /> : <StateView state={this.state.state} />}
                 </Sidebar.Pusher>
             </Sidebar.Pushable>
         );
     }
+}
+
+function LogView ({ messages }) {
+    messages = messages || [];
+    return(
+        <pre className='logview'>
+            {messages.join('\n')}
+        </pre>
+    )
 }
 
 function StatusIcon ({ component, state }) {

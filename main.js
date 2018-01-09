@@ -4,18 +4,25 @@ const path = require('path');
 const url = require('url');
 const { Controller } = require('bolero.lib');
 // Import parts of electron to use
-const { app, Menu, Tray, BrowserWindow } = electron;
+const { app, Menu, Tray, BrowserWindow, ipcMain } = electron;
+
+process.on('unhandledRejection', (reason, p) => {
+    console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+});
 
 const assetsDirectory = path.join(__dirname, 'src', 'assets', 'img');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 
-let eNotify = null;
 let mainWindow;
 let tray;
 let terminating;
-const controller = new Controller({ onStateChange, targetDir: path.join(app.getPath('home'), '.bolero') });
-let state = controller.getState();
+const boleroDir = path.join(app.getPath('home'), '.bolero');
+const controller = new Controller({ onStateChange, onMessage, targetDir: boleroDir });
+let state = {
+    state: controller.getState(),
+    messages: []
+};
 
 // Keep a reference for dev mode
 let dev = false;
@@ -26,8 +33,8 @@ if (process.defaultApp || /[\\/]electron-prebuilt[\\/]/.test(process.execPath) |
 function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({
-        width: 510,
-        height: 510,
+        width: 550,
+        height: 550,
         show: false,
         fullscreenable: false,
         resizable: false,
@@ -73,17 +80,13 @@ function createWindow() {
         }
         tray.setImage(trayImage);
         mainWindow = null;
-        eNotify.notify({
-            title: 'Bolero runs in the background',
-            text: 'You can close Bolero completely in the tray menu.'
-        });
     };
 
     // Don't show until we are ready and loaded
     mainWindow.once('ready-to-show', () => {
         mainWindow.show();
         mainWindow.focus();
-        onStateChange(state);
+        onStateChange(state.state);
         // Open the DevTools automatically if developing
         if (dev) {
             mainWindow.webContents.openDevTools();
@@ -191,11 +194,18 @@ function toggleWindow() {
 }
 
 function onStateChange(newState) {
-    state = newState;
-    // console.log(JSON.stringify(newState, null, 2));
+    state.state = newState;
+    console.log('STATE CHANGE');
+    //console.log(JSON.stringify(newState, null, 2));
     if (!terminating && mainWindow) {
         mainWindow.webContents.send('state', state);
     }
+}
+
+function onMessage (component, message) {
+    state.messages.push(`${new Date()} ${component}: ${message}`);
+    state.messages = state.messages.splice(-3000);
+    onStateChange(state.state);
 }
 
 function terminate() {
@@ -215,10 +225,6 @@ process.on('SIGTERM', terminate);
 app.dock && app.dock.hide();
 
 app.on('ready', () => {
-    eNotify = require('electron-notify');  // can only be imported after the app is ready
-    eNotify.setConfig({
-        displayTime: 6000
-    });
     controller.start();
     createTray();
     createWindow();
@@ -229,6 +235,10 @@ app.on('window-all-closed', function () {
     //app.quit()
 });
 
+ipcMain.on('requestUpdate', (event, arg) => {
+    event.sender.send('state', state);
+});
+
 module.exports = {
-    requestUpdate: () => onStateChange(state)
+    requestUpdate: () => onStateChange(state.state)
 };
