@@ -44,7 +44,7 @@
     "webpack-dev-server": "^2.4.5"
   },
   "dependencies": {
-    "bolero.lib": "^0.1.8",
+    "bolero.lib": "^0.1.9",
     "colors": "^1.1.2",
     "electron-notify": "^0.1.0",
     "nat-upnp": "^1.1.1",

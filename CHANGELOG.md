@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changes
+- Upgrades bolero.lib/nelson.cli
+
 ## [0.1.11] - 2018-01-09
 
 ### Changes
