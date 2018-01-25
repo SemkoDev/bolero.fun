@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.1.13] - 2018-01-09
 ## Added
 - Shutdown option to the tool bar
 - New IRI and Nelson versions
