@@ -33,7 +33,7 @@ if (process.defaultApp || /[\\/]electron-prebuilt[\\/]/.test(process.execPath) |
 function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({
-        width: 550,
+        width: 680,
         height: 550,
         show: false,
         fullscreenable: false,
@@ -151,7 +151,7 @@ function createTray() {
 
     const contextMenu = Menu.buildFromTemplate([
         {
-            label: 'Open',
+            label: 'Open Window',
             accelerator: 'Alt+Command+O',
             click: function () {
                 if (!mainWindow) {
@@ -161,7 +161,7 @@ function createTray() {
                 }
             }
         }, {
-            label: 'Exit',
+            label: 'Power Off',
             accelerator: 'Alt+Command+X',
             click: function () {
                 if (tray) {
@@ -237,6 +237,10 @@ app.on('window-all-closed', function () {
 
 ipcMain.on('requestUpdate', (event, arg) => {
     event.sender.send('state', state);
+});
+
+ipcMain.on('shutdown', (event, arg) => {
+    terminate();
 });
 
 module.exports = {
