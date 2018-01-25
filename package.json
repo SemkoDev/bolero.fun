@@ -34,7 +34,7 @@
     "babel-preset-react": "^6.24.1",
     "babili-webpack-plugin": "^0.1.2",
     "css-loader": "^0.28.1",
-    "electron": "^1.7.8",
+    "electron": "^1.8.1",
     "electron-packager": "^9.1.0",
     "extract-text-webpack-plugin": "^3.0.1",
     "file-loader": "^1.1.5",
@@ -47,7 +47,7 @@
     "webpack-dev-server": "^2.4.5"
   },
   "dependencies": {
-    "bolero.lib": "^0.1.9",
+    "bolero.lib": "^0.1.12",
     "colors": "^1.1.2",
     "electron-notify": "^0.1.0",
     "nat-upnp": "^1.1.1",

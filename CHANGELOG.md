@@ -6,16 +6,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-- Adds shutdown option to the tool bar
+## Added
+- Shutdown option to the tool bar
+- New IRI and Nelson versions
+- Auto-scrolling of the logs
 
 ## [0.1.12] - 2018-01-09
 
-### Changes
+### Changed
 - Upgrades bolero.lib/nelson.cli
 
 ## [0.1.11] - 2018-01-09
 
-### Changes
+### Changed
 - fixes #24 - less memory required: changed to 3.6GB
 - fixed #23 - sync on windows
 - fixes #22 - exit in osx

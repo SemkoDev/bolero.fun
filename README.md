@@ -141,6 +141,11 @@ by running Bolero as much as you can!
 
 * **Roman Semko** - *SemkoDev* - (https://github.com/romansemko)
 
+
+## Contributors
+
+* **IRI Database** - Kindly provided by *IOTA Partners* (https://iota.partners)
+
 ## License
 
 This project is licensed under the ICS License - see the [LICENSE.md](LICENSE.md) file for details
