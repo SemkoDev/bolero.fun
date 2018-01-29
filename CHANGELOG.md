@@ -6,8 +6,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.1.14] - 2018-01-29
+
+### Added
+- File logs of the current running sesion to .bolero/current.log
+
+### Changed
+- Upgraded IRI and Nelson to 1.4.2.1 compatible versions.
+
 ## [0.1.13] - 2018-01-09
-## Added
+
+### Added
 - Shutdown option to the tool bar
 - New IRI and Nelson versions
 - Auto-scrolling of the logs

@@ -1,6 +1,7 @@
 const electron = require('electron');
 const platform = require('os').platform();
 const path = require('path');
+const fs = require('fs');
 const url = require('url');
 const { Controller } = require('bolero.lib');
 // Import parts of electron to use
@@ -18,6 +19,7 @@ let mainWindow;
 let tray;
 let terminating;
 const boleroDir = path.join(app.getPath('home'), '.bolero');
+const logDir = path.join(boleroDir, 'current.log');
 const controller = new Controller({ onStateChange, onMessage, targetDir: boleroDir });
 let state = {
     state: controller.getState(),
@@ -203,7 +205,9 @@ function onStateChange(newState) {
 }
 
 function onMessage (component, message) {
-    state.messages.push(`${new Date()} ${component}: ${message}`);
+    const msg = `${new Date()} ${component}: ${message}`;
+    fs.appendFileSync(logDir, `${msg}\n`);
+    state.messages.push(msg);
     state.messages = state.messages.splice(-3000);
     onStateChange(state.state);
 }
