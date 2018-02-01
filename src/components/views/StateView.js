@@ -28,13 +28,13 @@ export default class StateView extends Component {
         const localAddress = 'http://localhost:14265';
 
         const isIRISyncronized = state.iri.status === 'running' &&
-            state.iri.info.latestSolidSubtangleMilestoneIndex > 243000 &&
+            state.iri.info.latestSolidSubtangleMilestoneIndex > 338000 &&
             state.iri.info.latestSolidSubtangleMilestoneIndex === state.iri.info.latestMilestoneIndex;
         const isIRISyncronizedText = isIRISyncronized
             ? 'Yes'
             : (
                 state.iri && state.iri.info && state.iri.info.latestSolidSubtangleMilestoneIndex &&
-                state.iri.info.latestSolidSubtangleMilestoneIndex > 243000 &&
+                state.iri.info.latestSolidSubtangleMilestoneIndex > 338000 &&
                 Math.abs(state.iri.info.latestSolidSubtangleMilestoneIndex - state.iri.info.latestMilestoneIndex) < 600
             )
                 ? 'Almost'
