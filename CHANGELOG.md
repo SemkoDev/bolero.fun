@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.1.15] - 2018-02-01
+
 ### Changed
 - Upgraded bolero.lib with possible fix for #45
 - Fixed windows database version update error
