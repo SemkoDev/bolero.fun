@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+- Upgraded bolero.lib with possible fix for #45
+- Fixed windows database version update error
+- Fixed "IRI Synchronised" display.
+
 ## [0.1.14] - 2018-01-29
 
 ### Added
