@@ -56,7 +56,7 @@ On Linux, you might need to start bolero.run from the command line.
 ### Running
 
 There is not much to do here. This is still barebone. Just start the app.
-Everything runs on default ports and cofigurations.
+Everything runs on default ports and configurations.
 
 The app appears as a carrot symbol in your tray/task bar.
 
