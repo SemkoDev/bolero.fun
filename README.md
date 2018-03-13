@@ -58,7 +58,10 @@ On Linux, you might need to start bolero.run from the command line.
 There is not much to do here. This is still barebone. Just start the app.
 Everything runs on default ports and cofigurations.
 
-The app appears as a carrot symbol in your tray/task bar.
+The app appears as a carrot symbol in your tray/task bar. The app interface is
+launched within your default web browser. You can close the browser window and
+the app will continue to run in the background until you click on exit in the
+tray icon submenu.
 
 First start might take a while, since Bolero downloads IRI (full node package)
 and a snapshot of the database, which is over 5GB in size. So the first start
