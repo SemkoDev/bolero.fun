@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import copy from 'copy-to-clipboard';
 import { Segment, Header, Icon, List } from 'semantic-ui-react'
 import ErrorView from './ErrorView'
 import LoadingView from './LoadingView'
@@ -106,8 +107,7 @@ export default class StateView extends Component {
     }
 
     copyAddress (localAddress) {
-        window.clipboard.writeText(localAddress);
-        window.clipboard.writeText(localAddress, 'selection');
+        copy(localAddress);
         this.setState({
             copiedAddress: this.state.copiedAddress + 1
         });

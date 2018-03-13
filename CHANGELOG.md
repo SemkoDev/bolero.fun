@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.3.3] - 2018-03-13
+
+### Added
+- CarrIOTA Field support
+
+### Changed
+- Upgraded IRI to 1.4.2.2
+- Reversed log display
+- The interface is started in the web browser now.
+
 ## [0.1.15] - 2018-02-01
 
 ### Changed

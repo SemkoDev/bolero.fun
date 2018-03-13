@@ -32,9 +32,15 @@ body {
 .logview {
   height: auto;
   padding: 5px;
-  max-height: 470px;
+  max-height: 100%;
+  border-bottom: 40px solid white;
   overflow: auto;
   word-break: normal !important;
   word-wrap: break-word !important;
   white-space: pre-wrap !important;
+}
+
+.pushable > .pusher {
+  max-height: 100%;
+  overflow-y: scroll;
 }
