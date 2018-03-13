@@ -1,11 +1,9 @@
 const electron = require('electron');
 const platform = require('os').platform();
 const path = require('path');
-const fs = require('fs');
-const url = require('url');
-const { Controller } = require('bolero.lib');
+const api = require('./api');
 // Import parts of electron to use
-const { app, Menu, Tray, BrowserWindow, ipcMain } = electron;
+const { app, Menu, Tray } = electron;
 
 process.on('unhandledRejection', (reason, p) => {
     console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
@@ -15,128 +13,10 @@ const assetsDirectory = path.join(__dirname, 'src', 'assets', 'img');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 
-let mainWindow;
 let tray;
-let terminating;
-const boleroDir = path.join(app.getPath('home'), '.bolero');
-const logDir = path.join(boleroDir, 'current.log');
-const controller = new Controller({ onStateChange, onMessage, targetDir: boleroDir });
-let state = {
-    state: controller.getState(),
-    messages: []
-};
+const targetDir = path.join(app.getPath('home'), '.bolero');
 
-// Keep a reference for dev mode
-let dev = false;
-if (process.defaultApp || /[\\/]electron-prebuilt[\\/]/.test(process.execPath) || /[\\/]electron[\\/]/.test(process.execPath)) {
-    dev = true;
-}
-
-function createWindow() {
-    // Create the browser window.
-    mainWindow = new BrowserWindow({
-        width: 680,
-        height: 550,
-        show: false,
-        fullscreenable: false,
-        resizable: false,
-        minimizable: false,
-        maximizable: false,
-        webPreferences: {
-            // Prevents renderer process code from not running when window is hidden
-            backgroundThrottling: false,
-            nodeIntegration: true,
-            preload: __dirname + '/preload.js'
-        }
-    });
-
-    // and load the index.html of the app.
-    let indexPath;
-    if (dev && process.argv.indexOf('--noDevServer') === -1) {
-        indexPath = url.format({
-            protocol: 'http:',
-            host: 'localhost:8088',
-            pathname: 'index.html',
-            slashes: true
-        });
-    } else {
-        indexPath = url.format({
-            protocol: 'file:',
-            pathname: path.join(__dirname, 'dist', 'index.html'),
-            slashes: true
-        });
-    }
-    mainWindow.loadURL(indexPath);
-
-    const onHide = () => {
-        if (!tray) {
-            return;
-        }
-        tray.setHighlightMode('never');
-        let trayImage = path.join(assetsDirectory, 'icon-128x128.png');
-        if (platform === 'darwin') {
-            trayImage = path.join(assetsDirectory, 'icon.png');
-        }
-        else if (platform === 'win32') {
-            trayImage = path.join(assetsDirectory, 'icon.ico');
-        }
-        tray.setImage(trayImage);
-        mainWindow = null;
-    };
-
-    // Don't show until we are ready and loaded
-    mainWindow.once('ready-to-show', () => {
-        mainWindow.show();
-        mainWindow.focus();
-        onStateChange(state.state);
-        // Open the DevTools automatically if developing
-        if (dev) {
-            mainWindow.webContents.openDevTools();
-        }
-    });
-    mainWindow.on('show', () => {
-        tray.setHighlightMode('always');
-        if (platform === "darwin") {
-            tray.setImage(path.join(assetsDirectory, 'iconHighlight.png'));
-        }
-    });
-    mainWindow.on('hide', onHide);
-
-    // Emitted when the window is closed.
-    mainWindow.on('closed', onHide);
-
-    mainWindow.on('onbeforeunload', (e) => {
-        e.returnValue = 1;
-    });
-
-    // Check if we are on a MAC
-    if (process.platform === 'darwin') {
-        const template = [{
-            role: 'window',
-            label: "Application",
-            submenu: [
-                { label: "About Application", selector: "orderFrontStandardAboutPanel:" },
-                { type: "separator" },
-                { label: "Quit", accelerator: "Command+Q", click: function() { app.quit(); }}
-            ]}, {
-            role: 'services',
-            label: "Edit",
-            submenu: [
-                {role: 'undo'},
-                {role: 'redo'},
-                {type: 'separator'},
-                {role: 'cut'},
-                {role: 'copy'},
-                {role: 'paste'},
-                {role: 'pasteandmatchstyle'},
-                {role: 'delete'},
-                {role: 'selectall'}
-            ]}
-        ];
-
-        Menu.setApplicationMenu(Menu.buildFromTemplate(template));
-    }
-}
+api.create({ targetDir });
 
 function createTray() {
     let trayImage = path.join(assetsDirectory, 'icon-128x128.png');
@@ -153,15 +33,9 @@ function createTray() {
 
     const contextMenu = Menu.buildFromTemplate([
         {
-            label: 'Open Window',
+            label: 'Open in Browser',
             accelerator: 'Alt+Command+O',
-            click: function () {
-                if (!mainWindow) {
-                    createWindow()
-                } else if (!mainWindow.isVisible()) {
-                    mainWindow.show();
-                }
-            }
+            click: showBrowserWindow
         }, {
             label: 'Power Off',
             accelerator: 'Alt+Command+X',
@@ -170,9 +44,6 @@ function createTray() {
                     tray.destroy();
                     tray = null;
                 }
-                if (mainWindow && mainWindow.isVisible()) {
-                    mainWindow.hide()
-                }
                 terminate();
             }
         }
@@ -180,43 +51,18 @@ function createTray() {
 
     tray.setContextMenu(contextMenu);
     tray.setToolTip('CarrIOTA Bolero');
-    tray.on('click', toggleWindow);
+    tray.on('click', showBrowserWindow);
     tray.on('right-click', () => tray.popUpContextMenu(contextMenu));
 }
 
-function toggleWindow() {
-    if (mainWindow && mainWindow.isVisible()) {
-        if (dev) {
-            mainWindow.webContents.closeDevTools();
-        }
-        mainWindow.hide()
-    } else {
-        createWindow()
-    }
-}
-
-function onStateChange(newState) {
-    state.state = newState;
-    console.log('STATE CHANGE');
-    //console.log(JSON.stringify(newState, null, 2));
-    if (!terminating && mainWindow) {
-        mainWindow.webContents.send('state', state);
-    }
-}
-
-function onMessage (component, message) {
-    const msg = `${new Date()} ${component}: ${message}`;
-    fs.appendFileSync(logDir, `${msg}\n`);
-    state.messages.push(msg);
-    state.messages = state.messages.splice(-3000);
-    onStateChange(state.state);
+function showBrowserWindow() {
+  electron.shell.openExternal(`http://localhost:${api.PORT}`)
 }
 
 function terminate() {
     console.log("STOPPING BOLERO..");
-    controller.stop().then(() => {
+    api.stop().then(() => {
         console.log("BOLERO STOPPED!");
-        terminating = true;
         app.quit();
         process.exit(0);
     })
@@ -229,24 +75,7 @@ process.on('SIGTERM', terminate);
 app.dock && app.dock.hide();
 
 app.on('ready', () => {
-    controller.start();
+    api.start();
     createTray();
-    createWindow();
+    showBrowserWindow();
 });
-
-// Quit when all windows are closed.
-app.on('window-all-closed', function () {
-    //app.quit()
-});
-
-ipcMain.on('requestUpdate', (event, arg) => {
-    event.sender.send('state', state);
-});
-
-ipcMain.on('shutdown', (event, arg) => {
-    terminate();
-});
-
-module.exports = {
-    requestUpdate: () => onStateChange(state.state)
-};

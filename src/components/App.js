@@ -1,45 +1,63 @@
 import React, { Component } from 'react';
 import { Sidebar, Segment, Menu } from 'semantic-ui-react';
+import copy from 'copy-to-clipboard';
 import StateView from './views/StateView';
 import LogView from './views/LogView';
+import SettingsView from './views/SettingsView';
 import StatusIcon from './icons/StatusIcon';
 import PopupMenuIcon from './icons/PopupMenuIcon';
 
 import 'semantic-ui-css/semantic.min.css';
 import '../assets/css/App.css';
+import ErrorView from "./views/ErrorView";
 
 const DONATE_ADDR = 'SOZAIPJMQUBOFCTDTJJDXCZEKNIYZGIGVDLFMH9FFBAYK9SWGTBCWVUTFHXDOUESZAXRJJCJESJPIEQCCKBUTVQPOW';
 
 class App extends Component {
-    constructor(params) {
-        super(params);
+    constructor(props) {
+        super(props);
         this.state = {
-            state: {},
-            messages: [],
-            showLog: false
+            showLog: false,
+            showSettings: false
         };
-        window.ipcRenderer.on('state', (event, state) => {
-            console.log('STATE', state);
-            this.setState(state);
-        });
-        setInterval(() => {
-            window.ipcRenderer.send('requestUpdate', 1);
-        }, 3000);
+    }
+
+    componentWillMount () {
+        const { requestUpdate } = this.props;
+        setInterval(requestUpdate, 500)
+    }
+
+    componentWillUnmount () {
+        const { requestUpdate } = this.props;
+        clearInterval(requestUpdate)
     }
 
     render() {
         const {
             iri = { status: 'waiting' },
             nelson = { status: 'waiting' },
+            field = { status: 'waiting' },
             database = { status: 'waiting' },
-            system = { status: 'waiting' }
-        } = this.state.state;
+            system = { status: 'waiting' },
+        } = this.props.state;
         const copyAddress = () => {
             this.copied = true;
             this.setState({ copied: {} });
-            window.clipboard.writeText(DONATE_ADDR);
-            window.clipboard.writeText(DONATE_ADDR, 'selection');
+            copy(DONATE_ADDR);
         };
+        let view = null;
+        if (this.props.error) {
+            view = <ErrorView message='Could not connect to Bolero! It might have crashed. Please try restarting Bolero.' />
+        } else if (this.state.showLog) {
+            view = <LogView messages={this.props.messages} />
+        } else if (this.state.showSettings) {
+            view = <SettingsView
+              saving={this.props.saving}
+              settings={this.props.settings}
+              updateSettings={this.props.updateSettings} />
+        } else {
+          view = <StateView state={this.props.state} />
+        }
 
         return (
             <Sidebar.Pushable as={Segment} className='wrapper'>
@@ -48,18 +66,25 @@ class App extends Component {
                     <StatusIcon component='Database' state={database} />
                     <StatusIcon component='IRI' state={iri} />
                     <StatusIcon component='Nelson' state={nelson} />
+                    <StatusIcon component='Field' state={field} />
                     <PopupMenuIcon
                         text={'Log'}
-                        color={this.state.showLog ? 'green' : 'white'}
+                        color={this.state.showLog ? 'green' : null}
                         icon={'bell'}
                         popupText={this.state.showLog ? 'Hide Log' : 'Show Log'}
-                        onClick={() => this.setState({ showLog: !this.state.showLog })} />
+                        onClick={() => this.setState({
+                          showLog: !this.state.showLog,
+                          showSettings: false
+                        })} />
                     <PopupMenuIcon
-                        text={'Power Off'}
-                        color={'green'}
-                        icon={'power'}
-                        popupText={'Shutdown Bolero'}
-                        onClick={() => { window.ipcRenderer.send('shutdown', 1); }} />
+                        text={'Settings'}
+                        color={this.state.showSettings ? 'green' : null}
+                        icon={'cogs'}
+                        popupText={this.state.showSettings ? 'Hide Settings' : 'Show Settings'}
+                        onClick={() => this.setState({
+                          showSettings: !this.state.showSettings,
+                          showLog: false
+                        })} />
                     <PopupMenuIcon
                         text={'Donate'}
                         color={'red'}
@@ -68,11 +93,7 @@ class App extends Component {
                         onClick={copyAddress} />
                 </Sidebar>
                 <Sidebar.Pusher>
-                    {
-                        this.state.showLog
-                            ? <LogView messages={this.state.messages} />
-                            : <StateView state={this.state.state} />
-                    }
+                  {view}
                 </Sidebar.Pusher>
             </Sidebar.Pushable>
         );
