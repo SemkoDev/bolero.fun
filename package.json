@@ -1,7 +1,7 @@
 {
   "name": "bolero.fun",
-  "version": "0.1.15",
-  "description": "IOTA Electron Full-node-app",
+  "version": "0.3.3",
+  "description": "CarrIOTA Bolero",
   "repository": {
     "type": "git",
     "url": "https://github.com/SemkoDev/bolero.fun.git"
