@@ -47,10 +47,10 @@ express()
 
 function create (opts) {
     const { targetDir } = opts;
+    logDir = path.join(targetDir, 'current.log');
     controller = new Controller({ onStateChange, onMessage, targetDir });
     state.state = controller.getState();
     state.settings = controller.settings.settings;
-    logDir = path.join(targetDir, 'current.log');
     return controller
 }
 
