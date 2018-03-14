@@ -39,6 +39,7 @@ You also need to open ports (port forwarding) in your NAT Router:
 * **UDP 14600**
 * **TCP 15600**
 * **TCP 16600**
+* **TCP 21310**
 
 Please refer to your Router's manual on how to do that.
 
