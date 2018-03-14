@@ -22,7 +22,7 @@ export default function LoadingView({ state }) {
                 <Header.Subheader>
                     It only happens once, but might take a while. <br/>
                     Meanwhile, make sure that your router has <br/>
-                    <b>15600 and 16600 TCP</b> ports open and forwarded <br/>
+                    <b>15600, 16600, 21310 TCP</b> ports open and forwarded <br/>
                     as well as <b>14600 UDP</b>.
                 </Header.Subheader>
             </Header>

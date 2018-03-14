@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.3.5] - 2018-03-14
+
+### Added
+- CarrIOTA Field port info to Readme and loading screen.
+
 ## [0.3.4] - 2018-03-13
 
 ### Added
