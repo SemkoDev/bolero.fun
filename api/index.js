@@ -21,7 +21,6 @@ process.on('unhandledRejection', (reason, p) => {
 });
 
 var app = express();
-
 app.use(express.static(path.join(__dirname, '..', 'dist')));
 app.use(bodyParser.urlencoded({ limit: CAR.limit, extended: false }));
 app.use(bodyParser.json({ limit: CAR.limit }));
@@ -53,7 +52,8 @@ app.post('/settings', (req, res) => {
 app.listen(APP.port, APP.host, () => console.log(`WEB Listening on ${APP.port}`));
 
 function create(opts) {
-	const { targetDir = CAR.targetDir } = opts;
+	let { targetDir } = opts;
+	targetDir = targetDir || CAR.targetDir;
 
 	controller = new Controller({ onStateChange, onMessage, targetDir });
 	state.state = controller.getState();

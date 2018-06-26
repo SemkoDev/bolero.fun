@@ -5,18 +5,18 @@ run an IOTA full node.
 
 ## Table of contents
 
-  * [Getting Started](#getting-started)
-    * [Prerequisites](#prerequisites)
-    * [Installing](#installing)
-    * [Running](#running)
-    * [Shutting Down](#shutting-down)
-  * [Building Locally](#building-locally)
-  * [FAQ](#faq)
-  * [Contributing](#contributing)
-    * [Donations](#donations)
-    * [Running Bolero](#running-bolero)
-  * [Authors](#authors)
-  * [License](#license)
+-   [Getting Started](#getting-started)
+    -   [Prerequisites](#prerequisites)
+    -   [Installing](#installing)
+    -   [Running](#running)
+    -   [Shutting Down](#shutting-down)
+-   [Building Locally](#building-locally)
+-   [FAQ](#faq)
+-   [Contributing](#contributing)
+    -   [Donations](#donations)
+    -   [Running Bolero](#running-bolero)
+-   [Authors](#authors)
+-   [License](#license)
 
 ## Getting Started
 
@@ -24,7 +24,7 @@ These instructions will get you a copy of this project running on your machine.
 
 ### Prerequisites
 
-You need Java to have installed on your machine. 
+You need Java to have installed on your machine.
 
 **WINDOWS:** Please make sure you have the correct Java installed. Running 32bit Java on a 64bit machine
 might crash IRI. If in doubt, install java from here, selecting correct bit version (32 or 64) depending
@@ -36,10 +36,10 @@ on your machine: ﻿https://www.java.com/en/download/manual.jsp
 
 You also need to open ports (port forwarding) in your NAT Router:
 
-* **UDP 14600**
-* **TCP 15600**
-* **TCP 16600**
-* **TCP 21310**
+-   **UDP 14600**
+-   **TCP 15600**
+-   **TCP 16600**
+-   **TCP 21310**
 
 Please refer to your Router's manual on how to do that.
 
@@ -92,6 +92,24 @@ npm run dev
 npm run package
 ```
 
+### Running with Docker (Experimental - without electron)
+
+Provided you have docker installed, Bolero.fun can be started as follows:
+
+Build a docker image
+
+```
+docker build -t bolero.fun .
+```
+
+Run the container
+
+```
+docker run -it -p 0.0.0.0:14265:14265 -p 0.0.0.0:21311:21311 -p 0.0.0.0:14600:14600/udp -p 0.0.0.0:15600:15600 -p 0.0.0.0:16600:16600 -p 0.0.0.0:21310:21310 -p 0.0.0.0:8088:8088 -p 0.0.0.0:3001:3001 -v $HOME/.bolero:/root/.bolero -v $(pwd):/app bolero npm run web
+```
+
+Go to http://localhost:21311/
+
 ## FAQ
 
 ### How to upgrade?
@@ -100,7 +118,7 @@ Shut down Bolero, download the new version. Start it. Database and snapshots are
 
 ### Where is the database located?
 
-In the User's home directory in a folder called ```.bolero```
+In the User's home directory in a folder called `.bolero`
 
 ### It takes very long to get synced
 
@@ -123,7 +141,7 @@ Please download Bolero 0.1.10 or above.
 
 ### What if I have more questions?
 
-* Join ```#bolero``` channel on IOTA's slack!
+-   Join `#bolero` channel on IOTA's slack!
 
 ## Contributing
 
@@ -140,17 +158,14 @@ AAJXXFJUEQHKPYIOUIUO9FWCMOAFBZAZPXIFRI9FLDQZJGHQENG9HNMODUZJCHR9RHHUSBHWJELGRDOW
 THe longer your app is running, the better for the network. Contribute to IOTA
 by running Bolero as much as you can!
 
-
 ## Authors
 
-* **Roman Semko** - *SemkoDev* - (https://github.com/romansemko)
-
+-   **Roman Semko** - _SemkoDev_ - (https://github.com/romansemko)
 
 ## Contributors
 
-* **IRI Database** - Kindly provided by *IOTA Partners* (https://iota.partners)
+-   **IRI Database** - Kindly provided by _IOTA Partners_ (https://iota.partners)
 
 ## License
 
 This project is licensed under the ICS License - see the [LICENSE.md](LICENSE.md) file for details
-
