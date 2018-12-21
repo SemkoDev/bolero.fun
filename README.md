@@ -1,4 +1,4 @@
-# Deviota Bolero
+# Bolero
 
 Bolero is a desktop application for various environments (Windows, Mac, Linux) to easily
 run an IOTA full node.
@@ -126,14 +126,6 @@ Please download Bolero 0.1.10 or above.
 - Join `#bolero` channel on IOTA's slack!
 
 ## Contributing
-
-### Donations
-
-**Donations always welcome**:
-
-```
-IYUIUCFNGOEEQHT9CQU9VYJVOJMQI9VYTQGQLTBAKTFIPWWRBFEV9TJWUZU9EYEFPM9VB9QYXTSMCDKMDABASVXPPX
-```
 
 ### Running Bolero
 
